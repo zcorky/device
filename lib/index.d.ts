@@ -14,12 +14,13 @@ export default function device(): {
     classNames: any[];
 };
 export declare function currentDevice(): {
-    ios: boolean;
+    os: any;
     osVersion: any;
     isWeixin: boolean;
     webView: boolean;
     pixelRatio: number;
     statusBar: boolean;
+    ua: string;
 };
 export declare function isWeixin(): boolean;
 export declare function isAndroid(): boolean;

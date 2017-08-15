@@ -142,8 +142,9 @@ export default function device() {
 }
 
 export function currentDevice() {
-  const { ios, osVersion, isWeixin, webView, pixelRatio, statusBar } = device();
-  return { ios, osVersion, isWeixin, webView, pixelRatio, statusBar };
+  const ua = getUa();
+  const { os, osVersion, isWeixin, webView, pixelRatio, statusBar } = device();
+  return { os, osVersion, isWeixin, webView, pixelRatio, statusBar, ua };
 }
 
 export function isWeixin() {
