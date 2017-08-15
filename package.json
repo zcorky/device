@@ -1,0 +1,16 @@
+{
+  "name": "device",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rm -rf lib"
+  },
+  "author": "Zero <uniquecolesmith@gmail.com>",
+  "devDependencies": {
+    "typescript": "^2.4.2"
+  },
+  "license": "MIT"
+}
