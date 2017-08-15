@@ -1,5 +1,4 @@
-declare function $(selector: any): any;
-declare function getDeviceInfo(): {
+export default function device(): {
     os: any;
     osVersion: any;
     webView: boolean;
@@ -14,3 +13,15 @@ declare function getDeviceInfo(): {
     pixelRatio: number;
     classNames: any[];
 };
+export declare function currentDevice(): {
+    ios: boolean;
+    osVersion: any;
+    isWeixin: boolean;
+    webView: boolean;
+    pixelRatio: number;
+    statusBar: boolean;
+};
+export declare function isWeixin(): boolean;
+export declare function isAndroid(): boolean;
+export declare function isIphone(): boolean;
+export declare function isIOS(): boolean;

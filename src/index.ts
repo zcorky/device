@@ -7,7 +7,7 @@ function $(selector) {
 
   element.length = element !== null ? 1 : 0;
 
-  element.attr = (attr) => { return element.getAttribute(attr); };
+  element.attr = (attr) => { return element.getAttribute(attr) || ''; };
 
   element.removeClass = (name) => { element.classList.remove(name); return element; };
 
@@ -16,8 +16,28 @@ function $(selector) {
   return element;
 }
 
+function getUa() {
+  return navigator.userAgent;
+}
+
+function getAndroid(ua) {
+  return ua.match(/(Android);?[\s\/]+([\d.]+)?/);
+}
+
+function getIpad(ua) {
+  return ua.match(/(iPad).*OS\s([\d_]+)/);
+}
+
+function getIpod(ua) {
+  return ua.match(/(iPod)(.*OS\s([\d_]+))?/);
+}
+
+function getIphone(ua, ipad) {
+  return !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/);
+}
+
 export default function device() {
-  const ua = navigator.userAgent;
+  const ua = getUa();
 
   const device = {
     os: null,
@@ -39,10 +59,10 @@ export default function device() {
     classNames: []
   };
 
-  const android = ua.match(/(Android);?[\s\/]+([\d.]+)?/);
-  const ipad = ua.match(/(iPad).*OS\s([\d_]+)/);
-  const ipod = ua.match(/(iPod)(.*OS\s([\d_]+))?/);
-  const iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/);
+  const android = getAndroid(ua)
+  const ipad = getIpad(ua);
+  const ipod = getIpod(ua);
+  const iphone = getIphone(ua, ipad);
 
   if (android) {
     device.os = 'android';
@@ -119,4 +139,32 @@ export default function device() {
   // if (classNames.length > 0) $('html').addClass(classNames);
 
   return device;
+}
+
+export function currentDevice() {
+  const { ios, osVersion, isWeixin, webView, pixelRatio, statusBar } = device();
+  return { ios, osVersion, isWeixin, webView, pixelRatio, statusBar };
+}
+
+export function isWeixin() {
+  const ua = getUa();
+  return /MicroMessenger/i.test(ua);
+}
+
+export function isAndroid() {
+  const ua = getUa();
+  return !!getAndroid(ua);
+}
+
+export function isIphone() {
+  const ua = getUa();
+  return !!getIphone(ua, getIpad(ua));
+}
+
+export function isIOS() {
+  const ua = getUa();
+  const ipad = getIpad(ua);
+  const ipod = getIpod(ua);
+  const iphone = getIphone(ua, ipad);
+  return !!(ipad || iphone || ipod);
 }
