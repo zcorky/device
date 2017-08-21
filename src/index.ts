@@ -169,3 +169,8 @@ export function isIOS() {
   const iphone = getIphone(ua, ipad);
   return !!(ipad || iphone || ipod);
 }
+
+export function isMobile() {
+  const ua = getUa();
+  return ua.indexOf('Mobile') !== -1;
+}
