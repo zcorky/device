@@ -8,5 +8,5 @@ export default function isWebView() {
   const ipad = getIpad();
   const ipod = getIpod();
   const iphone = getIphone();
-  return (iphone || ipad || ipod) && !!ua.match(/.*AppleWebKit(?!.*Safari)/i);
+  return !!(iphone || ipad || ipod) && !!ua.match(/.*AppleWebKit(?!.*Safari)/i);
 }

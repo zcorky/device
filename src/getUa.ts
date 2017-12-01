@@ -1,4 +1,4 @@
-let userAgent = navigator && navigator.userAgent;
+let userAgent = typeof navigator === 'undefined' ? '' : navigator.userAgent;
 
 export default function getUa() {
   return userAgent;

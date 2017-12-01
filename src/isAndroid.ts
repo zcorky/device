@@ -1,5 +1,5 @@
 import getAndroid from './getAndroid';
 
-export function isAndroid() {
+export default function isAndroid() {
   return !!getAndroid();
 }

@@ -1,4 +1,4 @@
-export default function getWidthHeight() {
+export default function getWindowSize() {
   return {
     screenWidth: window.screen ? window.screen.width : -1,
     screenHeight: window.screen ? window.screen.height : -1,
