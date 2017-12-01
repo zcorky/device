@@ -22,8 +22,3 @@ export declare function currentDevice(): {
     statusBar: boolean;
     ua: string;
 };
-export declare function isWeixin(): boolean;
-export declare function isAndroid(): boolean;
-export declare function isIphone(): boolean;
-export declare function isIOS(): boolean;
-export declare function isMobile(): boolean;
