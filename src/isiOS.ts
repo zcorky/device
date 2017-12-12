@@ -1,10 +1,6 @@
-import getIpad from './getIpad';
-import getIpod from './getIpod';
-import getIphone from './getIphone';
+import getUa from './getUa';
 
 export default function isIOS() {
-  const ipad = getIpad();
-  const ipod = getIpod();
-  const iphone = getIphone();
-  return !!(ipad || iphone || ipod);
+  const ua = getUa();
+  return /iPhone|iPad|iPod/i.test(ua);
 }

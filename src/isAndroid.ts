@@ -1,5 +1,6 @@
-import getAndroid from './getAndroid';
+import getUa from './getUa';
 
 export default function isAndroid() {
-  return !!getAndroid();
+  const ua = getUa();
+  return /Android/i.test(ua);
 }
