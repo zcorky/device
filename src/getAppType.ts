@@ -30,7 +30,9 @@ export default function () {
     ts.app = 'qq';
   }
   
-  if (isChrome()) {
+  if (isQQBrowser()) {
+    ts.browser = 'qqbrowser'
+  } else if (isChrome()) {
     ts.browser = 'chrome';
   } else if (isSafari()) {
     ts.browser = 'safari';
@@ -39,4 +41,6 @@ export default function () {
   } else if (isIE()) {
     ts.browser = 'ie'
   }
+
+  return ts;
 }
