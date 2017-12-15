@@ -34,7 +34,7 @@ export default function getVersion() {
   }
 
   // iOS 8+ changed UA
-  if (device.ios && device.osVersion && ua.indexOf('Version/') >= 0) {
+  if (device.ios && device.osVersion && ua.toLowerCase().indexOf('version/') >= 0) {
       if (device.osVersion.split('.')[0] === '10') {
           device.osVersion = ua.toLowerCase().split('version/')[1].split(' ')[0];
       }
