@@ -1,4 +1,5 @@
 import os from './os';
+import osVersion from './version';
 
 import isNativeApp from './isNativeApp';
 import getNativeApp from './getNativeApp';
@@ -16,6 +17,7 @@ import isIE from './isIE';
 export default function () {
   const ts = {
     os: os(),
+    osVersion: osVersion(),
     browser: null,
     app: null,
   };
