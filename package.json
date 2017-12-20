@@ -1,11 +1,12 @@
 {
   "name": "browser-device",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "npm run clean && tsc",
+    "prepublish": "npm run build",
     "clean": "rm -rf lib"
   },
   "author": "Zero <uniquecolesmith@gmail.com>",
