@@ -3,6 +3,7 @@ import getIpad from "./getIpad";
 import getIpod from "./getIpod";
 import getIphone from "./getIphone";
 import getUa from "./getUa";
+import isMacOS, { version as macOSVersion} from './isMacOS';
 
 export default function getVersion() {
   const device = {
@@ -31,6 +32,9 @@ export default function getVersion() {
     } else if (ipod) {
       device.osVersion = ipod[3] ? ipod[3].replace(/_/g, '.') : null;
     }
+  } else if (isMacOS()) {
+    device.os = 'macos';
+    device.osVersion = macOSVersion();
   }
 
   // iOS 8+ changed UA

@@ -7,5 +7,5 @@ export default function isSafari() {
 
 export function version() {
   const ua = getUa();
-  return /Safari\/(\d+\.\d+\.\d+)/i.exec(ua)[1];
+  return /Safari\/([\d\.]+)/i.exec(ua)[1];
 }
