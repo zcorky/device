@@ -3,7 +3,9 @@ import getIpad from "./getIpad";
 import getIpod from "./getIpod";
 import getIphone from "./getIphone";
 import getUa from "./getUa";
+
 import isMacOS, { version as macOSVersion} from './isMacOS';
+import isWindows, { version as windowsVersion } from './isWindows';
 
 export default function getVersion() {
   const device = {
@@ -35,6 +37,9 @@ export default function getVersion() {
   } else if (isMacOS()) {
     device.os = 'macos';
     device.osVersion = macOSVersion();
+  } else if (isWindows()) {
+    device.os = 'windows';
+    device.osVersion = windowsVersion();
   }
 
   // iOS 8+ changed UA
