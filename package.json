@@ -5,13 +5,21 @@
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "npm run clean && tsc",
+    "build": "npm run clean && tsc && npm run build:iife",
+    "build:iife": "rollup -c",
     "prepublish": "npm run build",
     "clean": "rm -rf lib"
   },
   "author": "Zero <uniquecolesmith@gmail.com>",
   "devDependencies": {
-    "typescript": "^2.4.2"
+    "fingerprintjs": "^0.5.3",
+    "rollup": "^0.53.2",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-typescript": "^0.8.1",
+    "rollup-plugin-uglify": "^2.0.1",
+    "typescript": "^2.4.2",
+    "uglify-es": "^3.3.4",
+    "unfetch": "^3.0.0"
   },
   "files": [
     "lib/*"
