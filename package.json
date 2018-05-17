@@ -1,12 +1,13 @@
 {
   "name": "browser-device",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "npm run clean && tsc && npm run build:iife",
+    "build": "npm run clean && tsc && npm run build:umd",
     "build:iife": "rollup -c",
+    "build:umd": "rollup -c rollup.config.lib.js",
     "prepublish": "npm run build",
     "clean": "rm -rf lib"
   },

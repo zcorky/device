@@ -1,24 +1,22 @@
 export default function device(): {
-    os: any;
-    osVersion: any;
-    webView: boolean;
-    minimalUI: boolean;
-    statusBar: boolean;
-    ios: boolean;
-    android: boolean;
-    iphone: boolean;
-    ipad: boolean;
-    androidChrome: boolean;
+    system: {
+        name: string;
+        version: any;
+    };
+    browser: {
+        name: string;
+        version: string;
+    };
     isWeixin: boolean;
+    isWebView: boolean;
     pixelRatio: number;
-    classNames: any[];
-};
-export declare function currentDevice(): {
-    os: any;
-    osVersion: any;
-    isWeixin: boolean;
-    webView: boolean;
-    pixelRatio: number;
-    statusBar: boolean;
-    ua: string;
+    size: {
+        screenWidth: number;
+        screenHeight: number;
+        outerWidth: number;
+        outerHeight: number;
+        width: any;
+        height: any;
+    };
+    fingerprint: any;
 };

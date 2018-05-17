@@ -33,6 +33,6 @@ function upload(url, data = {}, headers = {}) {
 setTimeout(function () {
   upload('https://api.uberqd.com/analysis', info(), {
     'Content-Type': 'application/json',
-    'Authorization': "Basic eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTRiNGYwYWE5MzliNDFhMjQ3MGM2NzAiLCJpYXQiOjE1MTQ4ODQ5MzAsImV4cCI6MTUyMDA2ODkzMCwiYXVkIjoiZXZhZXIiLCJpc3MiOiJldmEtc2VydmVyIiwic3ViIjoiZXZhZXIifQ.azMq48scAML6ExU6hKT1l6vnQywxiFuYMU9uc_axEK8",
+    'Authorization': "Basic eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTRiNGYwYWE5MzliNDFhMjQ3MGM2NzAiLCJpYXQiOjE1MjAyMjg5MzEsImV4cCI6MTUzNTc4MDkzMSwiYXVkIjoiZXZhZXIiLCJpc3MiOiJldmEtc2VydmVyIiwic3ViIjoiZXZhZXIifQ.8eUMM4jAlMDTvfxIZXCWQM3gRMIDAeTRFRmOLHY4ON4",
   });
 }, 1000);

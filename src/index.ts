@@ -1,3 +1,4 @@
+/*
 import getUa from "./getUa";
 import getAndroid from "./getAndroid";
 import getIpad from "./getIpad";
@@ -109,9 +110,26 @@ export default function device() {
 
   return device;
 }
+*/
+import getSystem from './system';
+import getBrowser from './browser';
 
-export function currentDevice() {
-  const ua = getUa();
-  const { os, osVersion, isWeixin, webView, pixelRatio, statusBar } = device();
-  return { os, osVersion, isWeixin, webView, pixelRatio, statusBar, ua };
+import isWeixin from './isWeixin';
+import isWebView from './isWebView';
+
+import windowSize from './getWindowSize';
+import Fingerprint from './fingerprint';
+
+export default function device() {
+  const system = getSystem();
+  const browser = getBrowser();
+  return {
+    system,
+    browser,
+    isWeixin: isWeixin(),
+    isWebView: isWebView(),
+    pixelRatio: window.devicePixelRatio,
+    size: windowSize(),
+    fingerprint: new Fingerprint(undefined).get(),
+  };
 }
