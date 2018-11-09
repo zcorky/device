@@ -7,5 +7,5 @@ export default function isMacOS() {
 
 export function version() {
   const ua = getUa();
-  return /Mac\sOS\sX\s(\d+_\d+_\d+)/i.exec(ua)[1];
+  return /Mac\sOS\sX\s((\d+_\d+_\d+)|(\d+\.\d+))/i.exec(ua)[1];
 }
