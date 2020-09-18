@@ -6,9 +6,9 @@ const resolve = require('rollup-plugin-node-resolve');
 export default {
   input: 'src/index.ts',
   output: {
-    file: 'lib/index.umd.js',
-    name: 'lib/index.umd.js',
-    format: 'umd',
+    file: 'lib/index.iife.js',
+    name: 'lib/index.iife.js',
+    format: 'iife',
   },
   sourceMap: false,
   plugins: [

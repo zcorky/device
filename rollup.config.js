@@ -4,11 +4,11 @@ const typescript = require('rollup-plugin-typescript');
 const resolve = require('rollup-plugin-node-resolve');
 
 export default {
-  input: 'src/index.iife.ts',
+  input: 'src/index.ts',
   output: {
-    file: 'lib/mobile-detect.min.js',
-    name: 'lib/mobile-detect.min.js',
-    format: 'iife',
+    file: 'lib/index.umd.js',
+    name: 'lib/index.umd.js',
+    format: 'umd',
   },
   sourceMap: false,
   plugins: [

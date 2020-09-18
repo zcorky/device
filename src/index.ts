@@ -1,135 +1,240 @@
-/*
-import getUa from "./getUa";
-import getAndroid from "./getAndroid";
-import getIpad from "./getIpad";
-import getIpod from "./getIpod";
-import getIphone from "./getIphone";
-import $ from "./utils";
+import Fingerprint from './component/fingerprint';
+const window = require('global');
 
-export default function device() {
-  const ua = getUa();
+export interface IDevice {
+  os(): IOS;
+  browser(): IBrowser;
+  platform(): IPlatform;
+  windowSize(): IWindowSize;
+  devicePixelRatio(): number;
+  fingerprint(): string;
+  // is
+  // is::os
+  isWindows(): boolean;
+  isMac(): boolean;
+  isLinux(): boolean;
+  // os:platform
+  isAndroid(): boolean;
+  isiOS(): boolean;
+  // is::browser
+  isChrome(): boolean;
+  isFirefox(): boolean;
+  isSafari(): boolean;
+  isIE(): boolean;
+  isQQBrowser(): boolean;
+  // is::app
+  isWeixin(): boolean;
+  isQQ(): boolean;
+  isWeibo(): boolean;
+  //
+  isWebview(): boolean;
+  isMobile(): boolean;
+  //
+  isOnline(): boolean;
+}
 
-  const device = {
-    os: null,
-    osVersion: null,
-    webView: false,
-    minimalUI: false,
-    statusBar: false,
-    //
-    ios: false,
-    android: false,
-    iphone: false,
-    ipad: false,
-    androidChrome: false,
-    //
-    isWeixin: /MicroMessenger/i.test(ua),
-    //
-    pixelRatio: window.devicePixelRatio || 1,
-    // 
-    classNames: []
-  };
+export interface IOS {
+  name: string;
+  version: string;
+}
 
-  const android = getAndroid();
-  const ipad = getIpad();
-  const ipod = getIpod();
-  const iphone = getIphone();
+export interface IBrowser {
+  name: string;
+  version: string;
+}
 
-  if (android) {
-    device.os = 'android';
-    device.osVersion = android[2];
-    device.android = true;
-    device.androidChrome = ua.toLowerCase().indexOf('chrome') >= 0;
-  } else if (ipad || iphone || ipod) {
-    device.os = 'ios';
-    device.ios = true;
+export type IPlatform = string;
 
-    if (iphone && !ipod) {
-      device.osVersion = iphone[2].replace(/_/g, '.');
-      device.iphone = true;
-    } else if (ipad) {
-      device.osVersion = ipad[2].replace(/_/g, '.');
-      device.ipad = true;
-    } else if (ipod) {
-      device.osVersion = ipod[3] ? ipod[3].replace(/_/g, '.') : null;
-      device.iphone = true;
+export interface IWindowSize {
+  width: number;
+  height: number;
+}
+
+export class Device implements IDevice {
+  
+  constructor(private ua: string = window.navigator?.userAgent) {}
+
+  public os(): IOS {
+    return {
+      name: this.osName(),
+      version: this.osVersion(),
+    };
+  }
+
+  public browser(): IBrowser {
+    return {
+      name: this.browserName(),
+      version: this.browserVersion(),
+    };
+  }
+
+  public platform() {
+    return window.navigator?.platform;
+  }
+
+  public isWindows(): boolean {
+    return this.is(/windows/i);
+  }
+
+  public isMac(): boolean {
+    return this.is(/macintosh/i);
+  }
+
+  public isLinux(): boolean {
+    return this.is(/linux/i);
+  }
+
+  // os:platform
+  public isAndroid(): boolean {
+    return this.is(/Android/i);
+  }
+
+  public isiOS(): boolean {
+    return this.is(/iPhone|iPad|iPod/i);
+  }
+
+  // is::browser
+  public isChrome(): boolean {
+    return this.is(/chrome/i);
+  }
+
+  public isFirefox(): boolean {
+    return this.is(/firefox/i);
+  }
+
+  public isSafari(): boolean {
+    return this.is(/Safari\/([\d\.]+)/i);
+  }
+
+  public isIE(): boolean {
+    return this.is(/msie (\d+\.\d+)/i);
+  }
+
+  public isQQBrowser(): boolean {
+    return this.is(/MQQBrowser/i);
+  }
+
+  // is::app
+  public isWeixin(): boolean {
+    return this.is(/MicroMessenger/i);
+  }
+
+  public isQQ(): boolean {
+    return this.is(/\ QQ\//i);
+  }
+
+  public isWeibo(): boolean {
+    return this.is(/Weibo/i);
+  }
+
+  //
+  public isWebview(): boolean {
+    return !this.isiOS() && !!this.is(/.*AppleWebKit(?!.*Safari)/i);
+  }
+
+  public isMobile(): boolean {
+    return this.is(/mobile/i);
+  }
+
+  //
+  public isOnline(): boolean {
+    return !!window.navigator?.onLine;
+  }
+
+  public windowSize() {
+    return {
+      screenWidth: window.screen?.width ?? -1,
+      screenHeight: window.screen?.height ?? -1,
+      outerWidth: window.outerWidth,
+      outerHeight: window.outerHeight,
+      width: window.innerWidth || window.document?.documentElement?.width,
+      height: window.innerHeight || window.document?.documentElement?.height,
+    };
+  }
+
+  public devicePixelRatio() {
+    return window.devicePixelRatio ?? 1;
+  }
+
+  public fingerprint() {
+    return new Fingerprint(undefined).get();
+  }
+
+  //
+  private osName() {
+    if (this.isAndroid()) {
+      return 'Android';
+    } else if (this.isiOS()) {
+      return 'iOS';
+    } else if (this.isMac()) {
+      return 'MacOS';
+    } else if (this.isWindows()) {
+      return 'Windows';
+    } else if (this.isLinux()) {
+      return 'Linux';
+    } else {
+      return '';
     }
   }
 
-  // iOS 8+ changed UA
-  if (device.ios && device.osVersion && ua.indexOf('Version/') >= 0) {
-      if (device.osVersion.split('.')[0] === '10') {
-          device.osVersion = ua.toLowerCase().split('version/')[1].split(' ')[0];
-      }
-  }
-
-  // Webview
-  device.webView = (iphone || ipad || ipod) && !!ua.match(/.*AppleWebKit(?!.*Safari)/i);
-
-  // Minimal UI
-  if (device.os === 'ios') {
-    const osVersionArr = device.osVersion.split('.');
-    device.minimalUI = !device.webView
-      && (ipad || iphone)
-      && (osVersionArr[0] * 1 === 7) ? osVersionArr[1] * 1 >= 1 : osVersionArr[0] * 1 > 7
-      && $('meta[name="viewport"]') && $('meta[name="viewport"]').attr('content').indexOf('minimal-ui') >= 0;
-  }
-
-  // Check for status bar and fullscreen app mode
-  const windowWidth = window.outerWidth;
-  const windowHeight = window.outerHeight;
-  if (device.webView && (windowWidth * windowHeight === screen.width * screen.height)) {
-      device.statusBar = true;
-  }
-
-  // Class: pixelRatio
-  const classNames = [];
-  classNames.push(`pixel-ratio-${Math.floor(device.pixelRatio)}`);
-  if (device.pixelRatio >= 2) {
-    classNames.push('retina');
-  }
-
-  // Class: os
-  if (device.os) {
-    classNames.push(device.os, device.os + '-' + device.osVersion.split('.')[0], device.os + '-' + device.osVersion.replace(/\./g, '-'));
-
-    if (device.ios) {
-      const major = parseInt(device.osVersion.split('.')[0], 10);
-      for (let i = major - 1; i >= 6; i--) {
-          classNames.push('ios-gt-' + i);
-      }
+  //
+  private osVersion() {
+    if (this.isAndroid()) {
+      return this.v(/Android\s(\d+\.\d+)/i);
+    } else if (this.isiOS()) {
+      return this.v(/iPhone\sOS\s([\d_]+)|iPad.*OS\s([\d_]+)/i);
+    } else if (this.isMac()) {
+      return this.v( /Mac\sOS\sX\s((\d+_\d+_\d+)|(\d+\.\d+))/i);
+    } else if (this.isWindows()) {
+      return this.v(/windows\snt\s([\d\.]+)/i);
+    } else if (this.isLinux()) {
+      return '';
+    } else {
+      return '';
     }
   }
 
-  // if (device.statusBar) {
-  //   classNames.push('with-statusbar-overlay');
-  // } else {
-  //   $('html').removeClass('with-statusbar-overlay');
-  // }
+  //
+  private browserName() {
+    if (this.isChrome()) {
+      return 'Chrome';
+    } else if (this.isFirefox()) {
+      return 'Firefox';
+    }  else if (this.isSafari()) {
+      return 'Safari';
+    } else if (this.isIE()) {
+      return 'IE';
+    } else if (this.isQQBrowser()) {
+      return 'QQBrowser';
+    } else {
+      return 'unknown';
+    }
+  }
 
-  // if (classNames.length > 0) $('html').addClass(classNames);
+  //
+  private browserVersion() {
+    if (this.isChrome()) {
+      return this.v(/chrome\/(\d+\.\d+\.\d+\.\d+)/i);
+    } else if (this.isFirefox()) {
+      return this.v(/firefox\/(\d+\.\d+)/i);
+    } else if (this.isSafari()) {
+      return this.v(/Safari\/([\d\.]+)/i);
+    } else if (this.isIE()) {
+      return this.v(/MSIE ([0-9]{1,}[\.0-9]{0,})/i);
+    } else if (this.isQQBrowser()) {
+      return this.v(/\ MQQBrowser\/([^\s]+)/i);
+    } else {
+      return 'unknown';
+    }
+  }
 
-  return device;
+  private is(regex: RegExp) {
+    return regex.test(this.ua);
+  }
+
+  private v(regex: RegExp) {
+    return regex.exec(this.ua)?.[1] ?? '';
+  }
 }
-*/
-import getSystem from './system';
-import getBrowser from './browser';
 
-import isWeixin from './isWeixin';
-import isWebView from './isWebView';
-
-import windowSize from './getWindowSize';
-import Fingerprint from './fingerprint';
-
-export default function device() {
-  const system = getSystem();
-  const browser = getBrowser();
-  return {
-    system,
-    browser,
-    isWeixin: isWeixin(),
-    isWebView: isWebView(),
-    pixelRatio: window.devicePixelRatio,
-    size: windowSize(),
-    fingerprint: new Fingerprint(undefined).get(),
-  };
-}
+export default Device;
