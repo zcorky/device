@@ -1,7 +1,11 @@
+import { NetworkInterfaceInfo } from 'os';
 import Fingerprint from './component/fingerprint';
 const window = require('global');
 
 export interface IDevice {
+  //
+  userAgent(): string;
+  //
   os(): IOS;
   browser(): IBrowser;
   platform(): IPlatform;
@@ -29,8 +33,11 @@ export interface IDevice {
   //
   isWebview(): boolean;
   isMobile(): boolean;
-  //
+  isiPhone(): boolean;
+  // functions
   isOnline(): boolean;
+  language(): string;
+  geolocation(): Promise<Position>;
 }
 
 export interface IOS {
@@ -52,7 +59,11 @@ export interface IWindowSize {
 
 export class Device implements IDevice {
   
-  constructor(private ua: string = window.navigator?.userAgent) {}
+  constructor(private ua: string = window?.navigator?.userAgent) {}
+
+  public userAgent() {
+    return this.ua;
+  }
 
   public os(): IOS {
     return {
@@ -69,7 +80,7 @@ export class Device implements IDevice {
   }
 
   public platform() {
-    return window.navigator?.platform;
+    return window?.navigator?.platform;
   }
 
   public isWindows(): boolean {
@@ -136,24 +147,38 @@ export class Device implements IDevice {
     return this.is(/mobile/i);
   }
 
+  public isiPhone(): boolean {
+    return this.is(/iPhone/i);
+  }
+
   //
   public isOnline(): boolean {
-    return !!window.navigator?.onLine;
+    return !!window?.navigator?.onLine;
+  }
+
+  public language(): string {
+    return window?.navigator?.language;
+  }
+
+  public async geolocation(): Promise<Position> {
+    return new Promise((resolve, reject) => {
+      window.navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
   }
 
   public windowSize() {
     return {
-      screenWidth: window.screen?.width ?? -1,
-      screenHeight: window.screen?.height ?? -1,
-      outerWidth: window.outerWidth,
-      outerHeight: window.outerHeight,
-      width: window.innerWidth || window.document?.documentElement?.width,
-      height: window.innerHeight || window.document?.documentElement?.height,
+      screenWidth: window?.screen?.width ?? -1,
+      screenHeight: window?.screen?.height ?? -1,
+      outerWidth: window?.outerWidth,
+      outerHeight: window?.outerHeight,
+      width: window?.innerWidth || window?.document?.documentElement?.width,
+      height: window?.innerHeight || window?.document?.documentElement?.height,
     };
   }
 
   public devicePixelRatio() {
-    return window.devicePixelRatio ?? 1;
+    return window?.devicePixelRatio ?? 1;
   }
 
   public fingerprint() {
@@ -184,7 +209,8 @@ export class Device implements IDevice {
     } else if (this.isiOS()) {
       return this.v(/iPhone\sOS\s([\d_]+)|iPad.*OS\s([\d_]+)/i);
     } else if (this.isMac()) {
-      return this.v( /Mac\sOS\sX\s((\d+_\d+_\d+)|(\d+\.\d+))/i);
+      const v = this.v(/Mac\sOS\sX\s((\d+_\d+_\d+)|(\d+\.\d+))/i);
+      return v && v.replace(/_/g, '.');
     } else if (this.isWindows()) {
       return this.v(/windows\snt\s([\d\.]+)/i);
     } else if (this.isLinux()) {
