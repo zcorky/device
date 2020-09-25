@@ -37,7 +37,69 @@ export interface IDevice {
   // functions
   isOnline(): boolean;
   language(): string;
-  geolocation(): Promise<Position>;
+  getGeolocation(): Promise<Position>;
+  getConnection(): Promise<IConnection>;
+  getBattery(): Promise<IBattery>;
+  getClipboard(): Promise<IClipboard | undefined>;
+  getUserMedia(options?: MediaStreamConstraints): Promise<MediaStream>;
+}
+
+export interface IConnection {
+  /**
+   * 网络下行速度
+   */
+  readonly downlink: number;
+
+  /**
+   * 网络类型
+   */
+  readonly effectiveType: '4g';
+
+  /**
+   * 有值代表网络状态变更
+   */
+  onchange: null | Function;
+
+  /**
+   * 打开请求数据保护模式
+   */
+  readonly saveData: boolean;
+}
+
+export interface IBattery {
+  /**
+   * 是否正在充电
+   */
+  readonly charging: boolean;
+
+  /**
+   * 距离充电完毕还需要多长时间，如果为0则充电完毕
+   *  单位秒
+   */
+  readonly chargingTime: number;
+
+  /**
+   * 电池剩余使用时间，单位秒
+   */
+  readonly dischargingTime: number;
+
+  /**
+   * 代表电量百分比, 值为 0.0 - 1.0
+   */
+  readonly level: number;
+
+  onchargingchange: null | Function;
+
+  onchargingtimechange: null | Function;
+
+  ondischaringtimechange: null | Function;
+
+  onlevelchange: null | Function;
+}
+
+export interface IClipboard {
+  readText(): Promise<string>;
+  writeText(text: string): Promise<void>;
 }
 
 export interface IOS {
@@ -160,10 +222,26 @@ export class Device implements IDevice {
     return window?.navigator?.language;
   }
 
-  public async geolocation(): Promise<Position> {
+  public async getGeolocation(): Promise<Position> {
     return new Promise((resolve, reject) => {
       window.navigator.geolocation.getCurrentPosition(resolve, reject);
     });
+  }
+
+  public async getConnection(): Promise<IConnection> {
+    return window.navigator?.connection || {};
+  }
+
+  public async getBattery(): Promise<IBattery> {
+    return window.navigator?.getBattery?.();
+  }
+
+  public async getClipboard(): Promise<IClipboard> {
+    return window.navigator?.clipboard;
+  }
+
+  public async getUserMedia(options: MediaStreamConstraints = { audio: true, video: true }): Promise<MediaStream> {
+    return navigator.mediaDevices.getUserMedia(options);
   }
 
   public windowSize() {
