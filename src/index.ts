@@ -2,6 +2,25 @@ import { NetworkInterfaceInfo } from 'os';
 import Fingerprint from './component/fingerprint';
 const window = require('global');
 
+// for compatible start
+interface GeolocationCoordinates {
+  readonly accuracy: number;
+  readonly altitude: number | null;
+  readonly altitudeAccuracy: number | null;
+  readonly heading: number | null;
+  readonly latitude: number;
+  readonly longitude: number;
+  readonly speed: number | null;
+}
+
+interface GeolocationPosition {
+  readonly coords: GeolocationCoordinates;
+  readonly timestamp: number;
+}
+
+export type Position = GeolocationPosition;
+// for compatible end
+
 export interface IDevice {
   //
   userAgent(): string;
