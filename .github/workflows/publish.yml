@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x]
+        node-version: [14.x]
     steps:
       - uses: actions/checkout@v2
 
@@ -40,8 +40,8 @@ jobs:
       - name: Make Testing
         run: npm run test
 
-      - name: Make Coverage
-        run: npm run coverage
+      # - name: Make Coverage
+      #   run: npm run coverage
 
   publish:
     needs: build
