@@ -139,7 +139,20 @@ export interface IWindowSize {
   height: number;
 }
 
+let  _current: IDevice | null = null;
+
 export class Device implements IDevice {
+  public static getCurrent() {
+    if (!_current) {
+      _current = new Device(window?.navigator?.userAgent);
+    }
+
+    return _current;
+  }
+
+  public static parse(ua: string) {
+    return new Device(ua);
+  }
   
   constructor(private ua: string = window?.navigator?.userAgent) {}
 
