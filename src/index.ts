@@ -53,6 +53,7 @@ export interface IDevice {
   isWebview(): boolean;
   isMobile(): boolean;
   isiPhone(): boolean;
+  isiPad(): boolean;
   // functions
   isOnline(): boolean;
   language(): string;
@@ -232,6 +233,10 @@ export class Device implements IDevice {
     return this.is(/iPhone/i);
   }
 
+  public isiPad(): boolean {
+    return this.is(/iPad/i);
+  }
+
   //
   public isOnline(): boolean {
     return !!window?.navigator?.onLine;
@@ -303,8 +308,12 @@ export class Device implements IDevice {
   private osVersion() {
     if (this.isAndroid()) {
       return this.v(/Android\s(\d+\.\d+)/i);
+    } else if (this.isiPad()) {
+      const v = this.v(/iPad.*OS\s([\d_]+)/i);
+      return v && v.replace(/_/g, '.');
     } else if (this.isiOS()) {
-      return this.v(/iPhone\sOS\s([\d_]+)|iPad.*OS\s([\d_]+)/i);
+      const v = this.v(/iPhone\sOS\s([\d_]+)/i);
+      return v && v.replace(/_/g, '.');
     } else if (this.isMac()) {
       const v = this.v(/Mac\sOS\sX\s((\d+_\d+_\d+)|(\d+\.\d+))/i);
       return v && v.replace(/_/g, '.');
