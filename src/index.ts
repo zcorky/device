@@ -150,6 +150,16 @@ export class Device implements IDevice {
     return _current;
   }
 
+  public static getDeviceFingerprint() {
+    return Device
+      .getCurrent()
+      .fingerprint();
+  }
+
+  public static getDeviceId() {
+    return Device.getDeviceFingerprint();
+  }
+
   public static parse(ua: string) {
     return new Device(ua);
   }
