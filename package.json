@@ -1,7 +1,7 @@
 {
   "name": "@zcorky/device",
-  "version": "0.0.5",
-  "description": "",
+  "version": "0.0.6",
+  "description": "Device Info by UserAgent",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
